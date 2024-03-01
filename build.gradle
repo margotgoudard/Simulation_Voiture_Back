@@ -1,0 +1,71 @@
+plugins {
+    id 'java'
+    id 'io.quarkus'
+    id "org.sonarqube" version "4.4.1.3373"
+    id 'jacoco'
+}
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+    implementation 'io.quarkus:quarkus-resteasy-reactive'
+    implementation 'io.quarkus:quarkus-arc'
+    testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation "io.quarkus:quarkus-jacoco"
+    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+group 'org.acme'
+version '1.0.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+test {
+    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
+    finalizedBy jacocoTestReport
+    jacoco {
+        excludeClassLoaders = ["*QuarkusClassLoader"]
+        destinationFile = layout.buildDirectory.file("jacoco-quarkus.exec").get().asFile
+    }
+    jacocoTestReport.enabled = true
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "projet15"
+        property "sonar.token", "sqp_51ad7cc169992a745c9898f57645c326b9b2a2d2"
+        property "sonar.projectName", "projet15"
+        property "sonar.qualitygate.wait", true
+        property "sonar.host.url", "https://sonar.home.lange.xyz"
+        tasks.jacocoTestReport.configure {
+            property("sonar.coverage.jacoco.xmlReportPaths", ["build/reports/jacoco/test/jacocoTestReport.xml"
+            ])
+        }
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        csv.required = true
+        html.required = false
+    }
+}
