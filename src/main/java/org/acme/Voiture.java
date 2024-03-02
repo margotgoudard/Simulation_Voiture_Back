@@ -2,6 +2,9 @@ package org.acme;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Voiture {
     private static int positionX;
@@ -12,14 +15,41 @@ public class Voiture {
     private String couleur; // Nouvel attribut pour la couleur
     private boolean estDetruite = false; // Pour gérer l'état de la voiture
     private static int speed = 0; // Speed management
-    private static List<Position> obstacles = new ArrayList<>(); // List to store obstacles
+    private static List<Position> obstacles = new ArrayList<>();
+    public static List<Position> boules = new ArrayList<>();
+
+    private static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+
 
     // Assuming you have a Position class defined somewhere
     static {
         // Example obstacles initialization
         obstacles.add(new Position(5, 5));
         obstacles.add(new Position(15, 15));
+        boules.add(new Position(15, 15));
+        boules.add(new Position(5, 15));
+        initBoulesMovement();
     } 
+
+    private static void initBoulesMovement() {
+        executorService.scheduleAtFixedRate(() -> {
+            deplacerBoulesVersVoiture();
+        }, 0, 1, TimeUnit.SECONDS);
+    }
+
+    private static void deplacerBoulesVersVoiture() {
+        // Vérifier si chaque boule n'est pas déjà à la position de la voiture
+        for (Position boule : boules) {
+            if (boule.getX() != positionX || boule.getY() != positionY) {
+                // Logique pour déplacer la boule en direction de la voiture
+                if (boule.getX() < positionX) boule.setX(boule.getX() + 1);
+                if (boule.getX() > positionX) boule.setX(boule.getX() - 1);
+                if (boule.getY() < positionY) boule.setY(boule.getY() + 1);
+                if (boule.getY() > positionY) boule.setY(boule.getY() - 1);
+            }
+        }
+    }
 
 
     // Constructeur avec paramètres
@@ -135,4 +165,6 @@ public class Voiture {
     public static void rechargerCarburant() {
         carburant = 60; // Recharge le carburant au maximum
     }
+
+   
 }

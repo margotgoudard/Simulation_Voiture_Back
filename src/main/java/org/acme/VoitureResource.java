@@ -2,15 +2,19 @@ package org.acme;
 
 import jakarta.ws.rs.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jboss.resteasy.annotations.SseElementType;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.sse.Sse;
 import jakarta.ws.rs.sse.SseEventSink;
 
@@ -73,5 +77,24 @@ public class VoitureResource {
         response.put("carburant", Voiture.getCarburant());
         System.out.println("Carburant rechargé et réponse envoyée: " + response);
         return response; // Retourne l'état actuel de la voiture après rechargement
+    }
+
+    @GET
+    @Path("/boules")
+    @Produces(MediaType.APPLICATION_JSON)
+    
+    public List<Map<String, Object>> getBoules() {
+        List<Map<String, Object>> boulesList = new ArrayList<>();
+    
+        // Assuming you have a list or collection of Boule instances
+        for (Position boule : Voiture.boules) { 
+            System.out.println("boules" + Voiture.boules);
+            Map<String, Object> bouleData = new HashMap<>();
+            bouleData.put("x", boule.getX());
+            bouleData.put("y", boule.getY());
+            boulesList.add(bouleData);
+        }
+    
+        return boulesList;
     }
 }
