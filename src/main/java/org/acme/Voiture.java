@@ -1,77 +1,138 @@
 package org.acme;
 
-import java.awt.*;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Voiture {
-    private int positionX;
-    private int positionY;
-    private int direction; // 0: avant, 1: droite, 2: arrière, 3: gauche
-    private int carburant = 60; // Niveau de carburant initial
+    private static int positionX;
+    private static int positionY;
+    private static char direction = 'd'; // Initial direction to the right ('d')
+    private static int carburant = 60; // Max carburant
+    private static int compteurDeplacements = 0;
+    private String couleur; // Nouvel attribut pour la couleur
+    private boolean estDetruite = false; // Pour gérer l'état de la voiture
+    private static int speed = 0; // Speed management
+    private static List<Position> obstacles = new ArrayList<>(); // List to store obstacles
 
-    public Voiture() {
-        this.positionX = 0;
-        this.positionY = 0;
-        this.direction = 0; // Commence en se dirigeant vers l'avant
+    // Assuming you have a Position class defined somewhere
+    static {
+        // Example obstacles initialization
+        obstacles.add(new Position(5, 5));
+        obstacles.add(new Position(15, 15));
+    } 
+
+
+    // Constructeur avec paramètres
+    public Voiture(int positionX, int positionY, char direction, int carburant, String couleur) {
+        this.positionX = positionX;
+        this.positionY = positionY;
+        this.direction = direction;
+        this.carburant = carburant;
+        this.couleur = couleur;
     }
 
-    public void deplacer(int n) {
-        if (carburant <= 0) {
-            System.out.println("La voiture est à court de carburant!");
-            return;
-        }
-
-        // Consomme du carburant
-        for (int i = 0; i < n; i++) {
-            if (i % 3 == 0) carburant -= 1;
-            if (carburant <= 0) {
-                System.out.println("La voiture est à court de carburant en cours de route!");
-                break;
-            }
-
-            switch (direction) {
-                case 0: positionY += 1; break; // Avance
-                case 1: positionX += 1; break; // Droite
-                case 2: positionY -= 1; break; // Arrière
-                case 3: positionX -= 1; break; // Gauche
-            }
-        }
-    }
-
-    public void tournerDroite() {
-        direction = (direction + 1) % 4;
-    }
-
-    public void tournerGauche() {
-        direction = (direction + 3) % 4;
-    }
-
-    public void rechargerCarburant() {
-        carburant = 60;
-    }
-
-    public int getPositionX() {
+    // Getters
+    public static int getPositionX() {
         return positionX;
     }
 
-    public int getPositionY() {
+    public static int getPositionY() {
         return positionY;
     }
 
-    public int getDirection() {
+    public static char getDirection() {
         return direction;
     }
 
-    public int getCarburant() {
+    public static int getCarburant() {
         return carburant;
     }
 
-    public void verifierEtRechargerSiStation(Set<Point> stations) {
-        Point positionActuelle = new Point(positionX, positionY);
-        if (stations.contains(positionActuelle)) {
-            System.out.println("Voiture rechargée à la station-service!");
-            rechargerCarburant();
+    // Setters
+    public void setPositionX(int positionX) {
+        this.positionX = positionX;
+    }
+
+    public void setPositionY(int positionY) {
+        this.positionY = positionY;
+    }
+
+    public void setDirection(char direction) {
+        this.direction = direction;
+    }
+
+    public void setCarburant(int carburant) {
+        this.carburant = carburant;
+    }
+    public static void deplacer(char touche) {
+        if (carburant <= 0) {
+            System.out.println("La voiture est à court de carburant !");
+            return;
+        }
+
+        switch(touche) {
+            case 'h': // haut
+                if (direction != 'h') {
+                    direction = 'h';
+                } else {
+                    positionY -= 1;
+                    consommerCarburant();
+                }
+                break;
+            case 'b': // bas
+                if (direction != 'b') {
+                    direction = 'b';
+                } else {
+                    positionY += 1;
+                    consommerCarburant();
+                }
+                break;
+            case 'g': // gauche
+                if (direction != 'g') {
+                    direction = 'g';
+                } else {
+                    positionX -= 1;
+                    consommerCarburant();
+                }
+                break;
+            case 'd': // droite
+                if (direction != 'd') {
+                    direction = 'd';
+                } else {
+                    positionX += 1;
+                    consommerCarburant();
+                }
+                break;
+            default:
+                System.out.println("Touche non reconnue");
+                break;
+        }
+
+        boolean hitsObstacle = obstacles.stream().anyMatch(obstacle ->
+            obstacle.getX() == positionX && obstacle.getY() == positionY);
+
+        if (hitsObstacle) {
+            if (speed > 2) {
+                System.out.println("Le véhicule est détruit à cause d'une collision à haute vitesse !");
+                // Reset vehicle state or handle destruction
+            } else {
+                System.out.println("Collision avec un obstacle !");
+                // Optionally, reduce speed or prevent movement
+            }
+            return; // Stop movement to simulate collision
         }
     }
 
+    private static void consommerCarburant() {
+        compteurDeplacements++;
+        if (compteurDeplacements >= 3) {
+            carburant -= 1; // Consomme 1 litre de carburant
+            compteurDeplacements = 0; // Réinitialise le compteur après la consommation
+        }
+    }
+    
+
+    public static void rechargerCarburant() {
+        carburant = 60; // Recharge le carburant au maximum
+    }
 }
