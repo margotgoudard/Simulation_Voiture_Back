@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.jboss.resteasy.annotations.SseElementType;
 
@@ -21,33 +22,39 @@ import jakarta.ws.rs.sse.SseEventSink;
 @Path("/voiture")
 public class VoitureResource {
 
-    @GET
-    @Produces(MediaType.SERVER_SENT_EVENTS)
-    @SseElementType("application/json")
-    public void positionStream(@Context SseEventSink eventSink, @Context Sse sse) {
-        final ObjectMapper mapper = new ObjectMapper();
-        final Runnable sendData = () -> {
-            try {
-                while (!Thread.currentThread().isInterrupted()) {
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("positionX", Voiture.getPositionX());
-                    data.put("positionY", Voiture.getPositionY());
-                    data.put("direction", Voiture.getDirection());
-                    data.put("carburant", Voiture.getCarburant());
+@GET
+@Produces(MediaType.SERVER_SENT_EVENTS)
+@SseElementType("application/json")
+public void positionStream(@Context SseEventSink eventSink, @Context Sse sse) {
+    final ObjectMapper mapper = new ObjectMapper();
+    final Runnable sendData = () -> {
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                Map<String, Object> data = new HashMap<>();
+                data.put("positionX", Voiture.getPositionX());
+                data.put("positionY", Voiture.getPositionY());
+                data.put("direction", Voiture.getDirection());
+                data.put("carburant", Voiture.getCarburant());
 
-                    String json = mapper.writeValueAsString(data);
+                // Ajouter les positions des boules
+                List<Map<String, Integer>> boulesPositions = Voiture.boules.stream()
+                        .map(boule -> Map.of("x", boule.getX(), "y", boule.getY()))
+                        .collect(Collectors.toList());
+                data.put("boules", boulesPositions);
 
-                    eventSink.send(sse.newEvent(json));
-                    Thread.sleep(1000); // Mise à jour chaque seconde
-                }
-            } catch (Exception e) {
-                Thread.currentThread().interrupt();
-                e.printStackTrace();
+                String json = mapper.writeValueAsString(data);
+
+                eventSink.send(sse.newEvent(json));
+                Thread.sleep(1000); // Mise à jour chaque seconde
             }
-        };
+        } catch (Exception e) {
+            Thread.currentThread().interrupt();
+            e.printStackTrace();
+        }
+    };
 
-        new Thread(sendData).start();
-    }
+    new Thread(sendData).start();
+}
 
 @POST
     @Path("/deplacer/{direction}")
@@ -97,4 +104,16 @@ public class VoitureResource {
     
         return boulesList;
     }
+
+    @POST
+    @Path("/reinitialiser")
+    public Response reinitialiserJeu() {
+        // Réinitialiser la position de la voiture, le carburant, etc.
+        Voiture.reinitialiser();
+
+        // Vous pouvez également réinitialiser les positions des boules, obstacles, et stations ici
+        // en fonction de votre logique de jeu.
+
+        return Response.ok().build(); // Répondre avec un statut OK après la réinitialisation
+}
 }

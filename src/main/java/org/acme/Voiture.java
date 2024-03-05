@@ -28,7 +28,7 @@ public class Voiture {
         obstacles.add(new Position(5, 5));
         obstacles.add(new Position(15, 15));
         boules.add(new Position(15, 15));
-        boules.add(new Position(5, 15));
+        boules.add(new Position(0, 5));
         initBoulesMovement();
     } 
 
@@ -79,20 +79,20 @@ public class Voiture {
     }
 
     // Setters
-    public void setPositionX(int positionX) {
-        this.positionX = positionX;
+    public static void setPositionX(int positionX) {
+        Voiture.positionX = positionX;
     }
 
-    public void setPositionY(int positionY) {
-        this.positionY = positionY;
+    public static void setPositionY(int positionY) {
+        Voiture.positionY = positionY;
     }
 
     public void setDirection(char direction) {
         this.direction = direction;
     }
 
-    public void setCarburant(int carburant) {
-        this.carburant = carburant;
+    public static void setCarburant(int carburant) {
+        Voiture.carburant = carburant;
     }
     public static void deplacer(char touche) {
         if (carburant <= 0) {
@@ -164,6 +164,12 @@ public class Voiture {
 
     public static void rechargerCarburant() {
         carburant = 60; // Recharge le carburant au maximum
+    }
+
+    public static void reinitialiser() {
+        setPositionX(10); 
+        setPositionY(15);
+        setCarburant(60);
     }
 
    
