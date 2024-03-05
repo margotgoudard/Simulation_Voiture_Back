@@ -1,60 +1,19 @@
-# code-with-quarkus
+# README - Backend Indépendant pour Jeu de Voiture avec SSE et Quarkus
+Ce projet est un backend indépendant écrit en Java, utilisant Quarkus et Server-Sent Events (SSE) pour un jeu de voiture. Il gère la logique du jeu, y compris les déplacements de la voiture, la gestion du carburant, les collisions avec des obstacles, et le mouvement des boules qui tentent de frapper la voiture.
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+## Fonctionnalités
+Déplacement de la Voiture: Répond aux commandes de déplacement envoyées par l'application front-end.
+Gestion du Carburant: Réduit le carburant en fonction du déplacement et permet de le recharger.
+Gestion des Obstacles et des Boules: Initialise et met à jour la position des obstacles et des boules, en vérifiant les collisions avec la voiture.
+SSE (Server-Sent Events): Envoie les mises à jour en temps réel de la position de la voiture, du carburant, et des boules au client.
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+## Technologies Utilisées
 
-## Running the application in dev mode
+Java: Langage de programmation utilisé pour le développement.
+Quarkus: Supersonic Subatomic Java Framework utilisé pour faciliter le développement et l'amélioration des performances.
+Gradle: Système de gestion et d'automatisation de builds.
 
-You can run your application in dev mode that enables live coding using:
-```shell script
+## Lancement
+
 ./gradlew quarkusDev
-```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
-
-## Packaging and running the application
-
-The application can be packaged using:
-```shell script
-./gradlew build
-```
-It produces the `quarkus-run.jar` file in the `build/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./gradlew build -Dquarkus.package.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar build/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using: 
-```shell script
-./gradlew build -Dquarkus.package.type=native
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./gradlew build -Dquarkus.package.type=native -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./build/code-with-quarkus-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/gradle-tooling.
-
-## Related Guides
-
-- RESTEasy Reactive ([guide](https://quarkus.io/guides/resteasy-reactive)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-
-## Provided Code
-
-### RESTEasy Reactive
-
-Easily start your Reactive RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)

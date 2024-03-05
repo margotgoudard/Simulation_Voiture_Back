@@ -111,8 +111,6 @@ public void positionStream(@Context SseEventSink eventSink, @Context Sse sse) {
         // Réinitialiser la position de la voiture, le carburant, etc.
         Voiture.reinitialiser();
 
-        // Vous pouvez également réinitialiser les positions des boules, obstacles, et stations ici
-        // en fonction de votre logique de jeu.
 
         return Response.ok().build(); // Répondre avec un statut OK après la réinitialisation
 }
