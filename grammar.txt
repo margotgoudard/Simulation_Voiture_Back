@@ -1,0 +1,5 @@
+PROGRAMME      -> INSTRUCTION+
+INSTRUCTION    -> DEPLACER
+
+DEPLACER       -> 'deplacer' '(' DIRECTION ')'
+DIRECTION      -> 'h' | 'b' | 'g' | 'd'

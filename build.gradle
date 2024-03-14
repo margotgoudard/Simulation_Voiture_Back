@@ -50,9 +50,9 @@ compileTestJava {
 
 sonar {
     properties {
-        property "sonar.projectKey", "projet15"
-        property "sonar.token", "sqp_51ad7cc169992a745c9898f57645c326b9b2a2d2"
-        property "sonar.projectName", "projet15"
+        property "sonar.projectKey", "projet-21"
+        property "sonar.token", "sqp_a8dba1374e14116677298ded1561a218d5f013ce"
+        property "sonar.projectName", "projet-21"
         property "sonar.qualitygate.wait", true
         property "sonar.host.url", "https://sonar.home.lange.xyz"
         tasks.jacocoTestReport.configure {
