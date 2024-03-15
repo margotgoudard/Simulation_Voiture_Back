@@ -52,7 +52,6 @@ compileTestJava {
 sonar {
     properties {
         property "sonar.projectKey", "projet-21"
-        property "sonar.gradle.skipCompile", "true"
         property "sonar.token", "sqp_a8dba1374e14116677298ded1561a218d5f013ce"
         property "sonar.projectName", "projet-21"
         property "sonar.qualitygate.wait", true
