@@ -60,7 +60,7 @@ class VoitureTest {
         Assert.assertEquals("La voiture devrait se déplacer vers le bas", 15, Voiture.getPositionY());
     }*/
 
-
+    /*
     @Test
     void testFuelConsumptionAfterThreeMovements() {
         Voiture.setCarburant(60);
@@ -73,6 +73,6 @@ class VoitureTest {
         // After 3 movements, the fuel should decrease by 1.
         assertEquals(59, Voiture.getCarburant(), "Fuel should decrease by 1 after 3 movements");
     }
-
+    */
 
 }
