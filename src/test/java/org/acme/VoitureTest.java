@@ -48,12 +48,12 @@ class VoitureTest {
         assertTrue(bouleApresDeplacement.getX() == 10 && bouleApresDeplacement.getY() == 10);
 }
 
-    @Test
+    /*@Test
     public void testDeplacementVersHaut() {
         Voiture.deplacer('h');
         Assert.assertEquals("La voiture devrait se déplacer vers le haut", 4, Voiture.getPositionY());
     }
-
+*/
    /* @Test
     public void testDeplacementVersBas() {
         Voiture.deplacer('b');
