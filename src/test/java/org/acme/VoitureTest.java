@@ -36,6 +36,12 @@ class VoitureTest {
     }
 
     @Test
+    public void testSetDirectionToLeft() {
+        Voiture.setDirection('g'); // Set direction to left
+        assertEquals('g', Voiture.getDirection());
+    }
+
+    @Test
     void testMouvementDesBoules() throws InterruptedException {
         Voiture.setPositionX(10);
         Voiture.setPositionY(10);
