@@ -36,7 +36,7 @@ class VoitureTest {
     }
 
     @Test
-    public void testSetDirectionToLeft() {
+    void testSetDirectionToLeft() {
         Voiture.setDirection('g'); // Set direction to left
         assertEquals('g', Voiture.getDirection());
     }
