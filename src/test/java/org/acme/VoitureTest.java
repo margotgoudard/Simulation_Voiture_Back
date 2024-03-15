@@ -1,9 +1,17 @@
 package org.acme;
-
+import org.junit.Assert;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.Before;
+
 class VoitureTest {
+
+    @BeforeAll
+    public static void setup() {
+        Voiture.reinitialiser(); // Réinitialise la position et le carburant de la voiture avant chaque test
+    }
 
     @Test
     void testDeplacementEtConsommationCarburant() {
@@ -39,6 +47,32 @@ class VoitureTest {
         Position bouleApresDeplacement = Voiture.boules.get(Voiture.boules.indexOf(bouleInitiale));
         assertTrue(bouleApresDeplacement.getX() == 10 && bouleApresDeplacement.getY() == 10);
 }
+
+    @Test
+    public void testDeplacementVersHaut() {
+        Voiture.deplacer('h');
+        Assert.assertEquals("La voiture devrait se déplacer vers le haut", 4, Voiture.getPositionY());
+    }
+
+    @Test
+    public void testDeplacementVersBas() {
+        Voiture.deplacer('b');
+        Assert.assertEquals("La voiture devrait se déplacer vers le bas", 15, Voiture.getPositionY());
+    }
+
+
+    @Test
+    void testFuelConsumptionAfterThreeMovements() {
+        Voiture.setCarburant(60);
+        
+        // Simulate 3 movements in any direction, here using 'd' for right.
+        Voiture.deplacer('d');
+        Voiture.deplacer('d');
+        Voiture.deplacer('d');
+        
+        // After 3 movements, the fuel should decrease by 1.
+        assertEquals(59, Voiture.getCarburant(), "Fuel should decrease by 1 after 3 movements");
+    }
 
 
 }

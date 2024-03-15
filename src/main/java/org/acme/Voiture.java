@@ -87,8 +87,8 @@ public class Voiture {
         Voiture.positionY = positionY;
     }
 
-    public void setDirection(char direction) {
-        this.direction = direction;
+    public static void setDirection(char direction) {
+        Voiture.direction = direction;
     }
 
     public static void setCarburant(int carburant) {

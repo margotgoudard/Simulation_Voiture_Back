@@ -1,12 +1,21 @@
 package org.acme;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+
+import java.util.Map;
 
 import jakarta.ws.rs.core.Response;
-
-// Importez vos classes nécessaires ici
+import jakarta.ws.rs.sse.Sse;
+import jakarta.ws.rs.sse.SseEventSink;
+import jakarta.ws.rs.sse.OutboundSseEvent;
 
 public class VoitureRessourceTest {
 
@@ -17,17 +26,6 @@ public class VoitureRessourceTest {
         voitureResource = new VoitureResource();
         Voiture.reinitialiser(); // Assurez-vous que l'état de la voiture est réinitialisé avant chaque test
     }
-
-    /*@Test
-    public void testDeplacerVoiture() {
-        // Test de déplacement vers le haut
-        var response = voitureResource.deplacerVoiture("h");
-        assertEquals(14, response.get("positionY")); // Supposant que la position initiale Y est 15
-        assertEquals('h', response.get("direction"));
-        assertTrue((Integer)response.get("carburant") < 60); // Le carburant doit être consommé
-
-        // Répétez pour les autres directions
-    }*/
 
     @Test
     public void testRechargerVoiture() {
@@ -61,4 +59,35 @@ public class VoitureRessourceTest {
         assertEquals(15, response.get("positionY"));
         assertEquals(60, response.get("carburant")); // Carburant rechargé au maximum
     }
+
+    
+
+    /*@Test
+    public void testPositionStream() throws Exception {
+        // Préparer les objets mock nécessaires
+        SseEventSink mockEventSink = mock(SseEventSink.class);
+        Sse mockSse = mock(Sse.class);
+        VoitureResource resource = new VoitureResource();
+    
+        // Créer un objet OutboundSseEvent simulé
+        OutboundSseEvent mockEvent = mock(OutboundSseEvent.class);
+    
+        // Simuler un événement avec des données JSON
+        String eventData = "{\"positionX\": 10, \"positionY\": 20, \"direction\": \"N\", \"carburant\": 50}";
+        Mockito.when(mockEvent.getData()).thenReturn(eventData);
+    
+        // Simuler le comportement de Sse pour créer un événement
+        Mockito.when(mockSse.newEvent(eventData)).thenReturn(mockEvent);
+    
+        // Appel de la méthode positionStream avec l'événement simulé
+        resource.positionStream(mockEventSink, mockSse);
+    
+        // Simuler un délai pour permettre l'envoi d'événements
+        Thread.sleep(2000); // Juste pour l'exemple, ajustez selon le besoin
+    
+        // Vérifier si l'événement a été envoyé avec les bonnes données
+        Mockito.verify(mockEventSink, Mockito.atLeastOnce()).send(mockEvent);
+    }
+    */
+    
 }
